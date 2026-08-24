@@ -12,5 +12,12 @@ form.addEventListener("submit", (event) => {
     return;
   }
 
-  resultText.textContent = `正在查询 “${word}”……（这是第一步的模拟结果）`;
+  const entry = dictionary[word.toLowerCase()];
+
+  if (entry === undefined) {
+    resultText.textContent = `暂时没有找到 “${word}”。`;
+    return;
+  }
+
+  resultText.textContent = `${word}：${entry.meaning}；${entry.partOfSpeech}。例句：${entry.example}`;
 });
