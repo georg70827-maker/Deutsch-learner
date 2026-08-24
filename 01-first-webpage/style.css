@@ -68,3 +68,20 @@ button {
 .result h2 {
   margin-top: 0;
 }
+
+.word-card {
+  margin-top: 16px;
+  padding-top: 12px;
+  border-top: 1px solid #eaecf0;
+}
+
+.word-card p {
+  margin: 8px 0;
+}
+
+.detail-label {
+  display: inline-block;
+  width: 56px;
+  color: #667085;
+  font-weight: 700;
+}

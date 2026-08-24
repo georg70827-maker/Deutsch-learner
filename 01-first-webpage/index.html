@@ -23,10 +23,15 @@
       <section class="result" aria-live="polite">
         <h2>结果</h2>
         <p id="result-text">请输入一个单词，然后点击“查询”。</p>
+        <div id="word-card" class="word-card" hidden>
+          <p><span class="detail-label">单词：</span><span id="result-word"></span></p>
+          <p><span class="detail-label">词义：</span><span id="result-meaning"></span></p>
+          <p><span class="detail-label">词性：</span><span id="result-part-of-speech"></span></p>
+          <p><span class="detail-label">例句：</span><span id="result-example"></span></p>
+        </div>
       </section>
     </main>
 
-    <script src="dictionary.js"></script>
     <script src="app.js"></script>
   </body>
 </html>
