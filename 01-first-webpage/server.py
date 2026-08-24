@@ -6,9 +6,11 @@ from storage import (
     add_message,
     conversation_exists,
     create_conversation,
+    get_messages,
     initialize_database,
     message_count,
 )
+from model_client import ModelConfigurationError, generate
 
 
 DICTIONARY = {
@@ -62,12 +64,31 @@ def continue_conversation(conversation_id, message):
         return {"error": "会话不存在，请重新开始场景对话。"}
 
     add_message(conversation_id, "user", message)
-    if "suppe" in message.lower():
-        reply = "Sehr gern. Möchten Sie auch etwas trinken?"
-    else:
-        reply = "Danke. Können Sie das bitte noch einmal sagen?"
+    history = get_messages(conversation_id)
+    model_messages = [
+        {
+            "role": "system",
+            "content": (
+                "Du bist ein freundlicher Deutschlehrer. Führe ein Restaurantgespräch "
+                "auf Deutsch auf A2-Niveau. Antworte kurz und korrigiere Fehler sanft."
+            ),
+        },
+        *history,
+    ]
+    try:
+        reply = generate(model_messages)
+    except (ModelConfigurationError, OSError, KeyError, ValueError):
+        if "suppe" in message.lower():
+            reply = "Sehr gern. Möchten Sie auch etwas trinken?"
+        else:
+            reply = "Danke. Können Sie das bitte noch einmal sagen?"
     add_message(conversation_id, "assistant", reply)
-    return {"conversation_id": conversation_id, "reply": reply, "turns": message_count(conversation_id)}
+    return {
+        "conversation_id": conversation_id,
+        "reply": reply,
+        "turns": message_count(conversation_id),
+        "history": get_messages(conversation_id),
+    }
 
 
 class GermanLearnerHandler(BaseHTTPRequestHandler):

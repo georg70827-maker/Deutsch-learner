@@ -67,3 +67,17 @@ def message_count(conversation_id):
             (conversation_id,),
         ).fetchone()
     return row[0]
+
+
+def get_messages(conversation_id):
+    with connect() as connection:
+        rows = connection.execute(
+            """
+            SELECT role, content
+            FROM messages
+            WHERE conversation_id = ?
+            ORDER BY id
+            """,
+            (conversation_id,),
+        ).fetchall()
+    return [{"role": role, "content": content} for role, content in rows]
