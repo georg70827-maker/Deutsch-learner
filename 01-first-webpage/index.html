@@ -1,0 +1,31 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Deutsch Learner - 第一步</title>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <main class="page">
+      <p class="eyebrow">Deutsch Learner · 第一步</p>
+      <h1>查一个德语单词</h1>
+      <p class="intro">先做页面交互，暂时使用模拟查询结果。</p>
+
+      <form id="word-form">
+        <label for="word-input">德语单词</label>
+        <div class="search-row">
+          <input id="word-input" name="word" placeholder="例如：gehen" autocomplete="off" />
+          <button type="submit">查询</button>
+        </div>
+      </form>
+
+      <section class="result" aria-live="polite">
+        <h2>结果</h2>
+        <p id="result-text">请输入一个单词，然后点击“查询”。</p>
+      </section>
+    </main>
+
+    <script src="app.js"></script>
+  </body>
+</html>

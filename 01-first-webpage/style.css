@@ -1,0 +1,70 @@
+:root {
+  font-family: system-ui, "Microsoft YaHei", sans-serif;
+  color: #1d2939;
+  background: #f7f8fc;
+}
+
+body {
+  margin: 0;
+}
+
+.page {
+  width: min(640px, calc(100% - 40px));
+  margin: 72px auto;
+}
+
+.eyebrow {
+  color: #667085;
+  font-size: 0.9rem;
+}
+
+h1 {
+  margin-bottom: 8px;
+}
+
+.intro {
+  color: #475467;
+}
+
+label,
+button {
+  display: block;
+  font-weight: 700;
+}
+
+.search-row {
+  display: flex;
+  gap: 10px;
+  margin-top: 8px;
+}
+
+input,
+button {
+  border: 1px solid #98a2b3;
+  border-radius: 8px;
+  font: inherit;
+  padding: 12px;
+}
+
+input {
+  flex: 1;
+}
+
+button {
+  cursor: pointer;
+  color: white;
+  background: #175cd3;
+  border-color: #175cd3;
+}
+
+.result {
+  margin-top: 28px;
+  padding: 20px;
+  border-radius: 12px;
+  background: white;
+  box-shadow: 0 1px 3px rgb(16 24 40 / 12%);
+}
+
+.result h2 {
+  margin-top: 0;
+}
