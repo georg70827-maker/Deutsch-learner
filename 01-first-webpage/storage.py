@@ -38,10 +38,11 @@ def create_conversation(conversation_id, scene, opening):
             "INSERT INTO conversations (id, scene) VALUES (?, ?)",
             (conversation_id, scene),
         )
-        connection.execute(
-            "INSERT INTO messages (conversation_id, role, content) VALUES (?, ?, ?)",
-            (conversation_id, "assistant", opening),
-        )
+        if opening:
+            connection.execute(
+                "INSERT INTO messages (conversation_id, role, content) VALUES (?, ?, ?)",
+                (conversation_id, "assistant", opening),
+            )
 
 
 def add_message(conversation_id, role, content):

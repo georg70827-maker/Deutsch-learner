@@ -8,6 +8,41 @@ const resultPartOfSpeech = document.querySelector("#result-part-of-speech");
 const resultExample = document.querySelector("#result-example");
 let conversationId = null;
 let conversationMode = false;
+const chatForm = document.querySelector("#chat-form");
+const chatInput = document.querySelector("#chat-input");
+const chatLog = document.querySelector("#chat-log");
+let chatSessionId = null;
+
+function appendChatMessage(role, content) {
+  const message = document.createElement("p");
+  message.className = `chat-message ${role}`;
+  message.textContent = content;
+  chatLog.append(message);
+}
+
+chatForm.addEventListener("submit", async (event) => {
+  event.preventDefault();
+  const message = chatInput.value.trim();
+  if (!message) return;
+
+  chatInput.value = "";
+  const emptyMessage = chatLog.querySelector(".chat-empty");
+  emptyMessage?.remove();
+  appendChatMessage("user", message);
+
+  const session = chatSessionId ? `&session=${encodeURIComponent(chatSessionId)}` : "";
+  const response = await fetch(
+    `http://127.0.0.1:8001/api/chat?message=${encodeURIComponent(message)}${session}`,
+  );
+  const data = await response.json();
+  if (!response.ok) {
+    appendChatMessage("error", data.error || "聊天请求失败");
+    return;
+  }
+
+  chatSessionId = data.conversation_id;
+  appendChatMessage("assistant", data.reply);
+});
 
 form.addEventListener("submit", async (event) => {
   event.preventDefault();

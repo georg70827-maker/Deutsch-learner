@@ -91,6 +91,38 @@ def continue_conversation(conversation_id, message):
     }
 
 
+def chat(message, conversation_id=None):
+    if not conversation_id:
+        conversation_id = str(uuid4())
+        create_conversation(conversation_id, "普通聊天", "")
+    elif not conversation_exists(conversation_id):
+        return {"error": "聊天会话不存在，请重新开始。"}
+
+    add_message(conversation_id, "user", message)
+    history = get_messages(conversation_id)
+    model_messages = [
+        {
+            "role": "system",
+            "content": (
+                "你是一个友好的德语学习教练。可以用中文解释，但练习时优先使用德语。"
+                "发现语法错误时，先自然回应，再温和地纠正，并根据学习者水平调整难度。"
+            ),
+        },
+        *history,
+    ]
+    try:
+        reply = generate(model_messages)
+    except Exception as error:
+        return {"error": f"模型调用失败：{error.__class__.__name__}"}
+
+    add_message(conversation_id, "assistant", reply)
+    return {
+        "conversation_id": conversation_id,
+        "reply": reply,
+        "history": get_messages(conversation_id),
+    }
+
+
 class GermanLearnerHandler(BaseHTTPRequestHandler):
     def do_GET(self):
         request = urlparse(self.path)
@@ -119,6 +151,17 @@ class GermanLearnerHandler(BaseHTTPRequestHandler):
             conversation_id = query.get("session", [""])[0]
             message = query.get("message", [""])[0].strip()
             self.send_json(continue_conversation(conversation_id, message))
+            return
+
+        if request.path == "/api/chat":
+            query = parse_qs(request.query)
+            conversation_id = query.get("session", [""])[0] or None
+            message = query.get("message", [""])[0].strip()
+            if not message:
+                self.send_json({"error": "消息不能为空。"}, status=400)
+                return
+            result = chat(message, conversation_id)
+            self.send_json(result, status=500 if "error" in result else 200)
             return
 
         if request.path != "/api/lookup":

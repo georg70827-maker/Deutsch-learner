@@ -85,3 +85,54 @@ button {
   color: #667085;
   font-weight: 700;
 }
+
+.chat-panel {
+  margin-top: 28px;
+  padding: 20px;
+  border-radius: 12px;
+  background: white;
+  box-shadow: 0 1px 3px rgb(16 24 40 / 12%);
+}
+
+.chat-panel h2 {
+  margin-top: 0;
+}
+
+.chat-log {
+  min-height: 120px;
+  padding: 12px;
+  border: 1px solid #eaecf0;
+  border-radius: 8px;
+}
+
+.chat-message {
+  max-width: 85%;
+  margin: 8px 0;
+  padding: 10px 12px;
+  border-radius: 10px;
+  white-space: pre-wrap;
+}
+
+.chat-message.user {
+  margin-left: auto;
+  background: #e0edff;
+}
+
+.chat-message.assistant {
+  background: #f2f4f7;
+}
+
+.chat-message.error {
+  color: #b42318;
+  background: #fef3f2;
+}
+
+.chat-form {
+  display: flex;
+  gap: 10px;
+  margin-top: 12px;
+}
+
+.chat-form input {
+  flex: 1;
+}
