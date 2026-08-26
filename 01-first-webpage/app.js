@@ -11,6 +11,7 @@ let conversationMode = false;
 const chatForm = document.querySelector("#chat-form");
 const chatInput = document.querySelector("#chat-input");
 const chatLog = document.querySelector("#chat-log");
+const levelSelect = document.querySelector("#level-select");
 let chatSessionId = null;
 
 function appendChatMessage(role, content) {
@@ -31,8 +32,9 @@ chatForm.addEventListener("submit", async (event) => {
   appendChatMessage("user", message);
 
   const session = chatSessionId ? `&session=${encodeURIComponent(chatSessionId)}` : "";
+  const level = `&level=${encodeURIComponent(levelSelect.value)}`;
   const response = await fetch(
-    `http://127.0.0.1:8001/api/chat?message=${encodeURIComponent(message)}${session}`,
+    `http://127.0.0.1:8001/api/chat?message=${encodeURIComponent(message)}${session}${level}`,
   );
   const data = await response.json();
   if (!response.ok) {

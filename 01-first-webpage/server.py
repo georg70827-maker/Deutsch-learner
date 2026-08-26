@@ -91,7 +91,7 @@ def continue_conversation(conversation_id, message):
     }
 
 
-def chat(message, conversation_id=None):
+def chat(message, conversation_id=None, level="A2"):
     if not conversation_id:
         conversation_id = str(uuid4())
         create_conversation(conversation_id, "普通聊天", "")
@@ -104,8 +104,10 @@ def chat(message, conversation_id=None):
         {
             "role": "system",
             "content": (
-                "你是一个友好的德语学习教练。可以用中文解释，但练习时优先使用德语。"
-                "发现语法错误时，先自然回应，再温和地纠正，并根据学习者水平调整难度。"
+                f"你是一个友好的德语学习教练。学习者等级是 {level}。"
+                "可以用中文解释，但练习时优先使用德语。"
+                "发现语法错误时，先自然回应，再温和地纠正。"
+                f"请按照 {level} 的词汇和句子复杂度回答。"
             ),
         },
         *history,
@@ -157,10 +159,13 @@ class GermanLearnerHandler(BaseHTTPRequestHandler):
             query = parse_qs(request.query)
             conversation_id = query.get("session", [""])[0] or None
             message = query.get("message", [""])[0].strip()
+            level = query.get("level", ["A2"])[0].upper()
+            if level not in {"A1", "A2", "B1"}:
+                level = "A2"
             if not message:
                 self.send_json({"error": "消息不能为空。"}, status=400)
                 return
-            result = chat(message, conversation_id)
+            result = chat(message, conversation_id, level)
             self.send_json(result, status=500 if "error" in result else 200)
             return
 

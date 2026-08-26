@@ -98,6 +98,15 @@ button {
   margin-top: 0;
 }
 
+.level-select {
+  display: block;
+  margin: 8px 0 12px;
+  padding: 8px;
+  border: 1px solid #98a2b3;
+  border-radius: 8px;
+  font: inherit;
+}
+
 .chat-log {
   min-height: 120px;
   padding: 12px;
