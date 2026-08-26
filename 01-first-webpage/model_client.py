@@ -9,6 +9,27 @@ class ModelConfigurationError(RuntimeError):
     pass
 
 
+def classify_intent(message):
+    prompt = [
+        {
+            "role": "system",
+            "content": (
+                "Classify the user's request. Return JSON only, with exactly one key "
+                "intent whose value is lookup, grammar, or conversation. "
+                "Use lookup for word meanings, grammar for grammar questions, "
+                "and conversation for role-play practice."
+            ),
+        },
+        {"role": "user", "content": message},
+    ]
+    raw = generate(prompt).strip()
+    parsed = json.loads(raw)
+    intent = parsed.get("intent")
+    if intent not in {"lookup", "grammar", "conversation"}:
+        raise ValueError("模型返回了无效意图")
+    return intent
+
+
 def build_payload(messages):
     return {
         "model": os.getenv("MODEL_NAME", "deepseek-v4-flash"),

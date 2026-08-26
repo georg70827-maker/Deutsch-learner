@@ -10,7 +10,7 @@ from storage import (
     initialize_database,
     message_count,
 )
-from model_client import ModelConfigurationError, generate
+from model_client import ModelConfigurationError, classify_intent, generate
 
 
 DICTIONARY = {
@@ -131,7 +131,10 @@ class GermanLearnerHandler(BaseHTTPRequestHandler):
 
         if request.path == "/api/agent":
             message = parse_qs(request.query).get("message", [""])[0].strip()
-            intent = decide_intent(message)
+            try:
+                intent = classify_intent(message)
+            except Exception:
+                intent = decide_intent(message)
             if intent == "grammar":
                 tool = "grammar_explainer"
                 result = explain_grammar(message)
